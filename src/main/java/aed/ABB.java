@@ -1,9 +1,12 @@
 package aed;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ABB<T extends Comparable<T>> {
     private Nodo raiz;
     private int cardinal;
-
+    
 
     private class Nodo {
         T valor;
@@ -93,15 +96,28 @@ public class ABB<T extends Comparable<T>> {
 
 
     public HandleABB insertar(T elem){
-        throw new UnsupportedOperationException("No implementado aún");
+        Nodo nuevo = new Nodo(elem);
+        raiz = insertarRec(raiz, nuevo, null);
+        cardinal ++;
+        return new HandleABB(nuevo);
     }
 
     public boolean pertenece(T elem){
-        throw new UnsupportedOperationException("No implementado aún");
+        return pertenceceRecursivo(raiz, elem);
     }
-
+    private boolean pertenceceRecursivo (Nodo actual, T elem){
+        if (actual==null) {return false;}
+        if (actual.valor.equals(elem)) {
+            return true;
+        }
+        else{
+            return pertenceceRecursivo(actual.izq, elem)||pertenceceRecursivo(actual.der, elem);
+        }
+        
+    }
     public void eliminar(T elem){
-        throw new UnsupportedOperationException("No implementado aún");
+        Nodo nodo = new Nodo (elem);
+        eliminarNodo(nodo);
     }
 
     @Override
@@ -110,11 +126,35 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public class ABB_Iterador {
-        /* ¡COMPLETAR! */
+        private List<T> elementos;
+        private int posicion;
+            
     }
 
     public ABB_Iterador iterador() {
-        throw new UnsupportedOperationException("No implementado aún");
+        elementos = new ArrayList<>();
+        posicion = 0;
+        recorridoInOrder(raiz); 
+    }
+    private void recorridoInOrder(Nodo actual) {
+        if (actual == null) return;
+        recorridoInOrder(actual.izq);
+        elementos.add(actual.valor);
+        recorridoInOrder(actual.der);
     }
 
+    public boolean haySiguiente() {
+        return posicion < elementos.size();
+    }
+
+    public T siguiente() {
+        T valor = elementos.get(posicion);
+        posicion++;
+        return valor;
+    }
+
+    public ABB_Iterador iterador() {
+        return new ABB_Iterador();
+    }
 }
+
